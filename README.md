@@ -8,7 +8,7 @@ A comprehensive MERN stack application for disaster response coordination with r
 
 - **Disaster Management**: Full CRUD operations with audit trails
 - **Location Extraction**: AI-powered location extraction using Google Gemini API
-- **Geocoding**: Convert location names to coordinates using Google Maps/OpenStreetMap
+- **Geocoding**: Convert location names to coordinates using **OpenStreetMap (Nominatim)** (no API key required)
 - **Social Media Monitoring**: Mock Twitter API with real-time updates
 - **Geospatial Resource Mapping**: Find resources near disaster locations
 - **Official Updates**: Web scraping from government/relief websites
@@ -34,7 +34,7 @@ A comprehensive MERN stack application for disaster response coordination with r
 - **Supabase** (PostgreSQL) with PostGIS for geospatial queries
 - **Socket.IO** for real-time updates
 - **Google Gemini API** for AI features
-- **Google Maps API** / OpenStreetMap for geocoding
+- **OpenStreetMap Nominatim** for geocoding (no API key required)
 - **Cheerio** for web scraping
 - **Winston** for structured logging
 
@@ -51,7 +51,6 @@ A comprehensive MERN stack application for disaster response coordination with r
 - npm or yarn
 - Supabase account
 - Google Gemini API key (optional)
-- Google Maps API key (optional)
 
 ## Setup Instructions
 
@@ -88,13 +87,10 @@ NODE_ENV=development
 # Supabase Configuration
 SUPABASE_URL=your_supabase_url_here
 SUPABASE_ANON_KEY=your_supabase_anon_key_here
-SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_role_key_here
+SUPABASE_SERVICE_ROLE_KEY=your_service_role_key_here
 
 # Google Gemini API (optional)
 GEMINI_API_KEY=your_gemini_api_key_here
-
-# Google Maps API (optional)
-GOOGLE_MAPS_API_KEY=your_google_maps_api_key_here
 
 # Rate Limiting
 RATE_LIMIT_WINDOW_MS=900000
@@ -121,12 +117,12 @@ LOG_LEVEL=info
 2. Create an API key
 3. Add to `.env`
 
-#### Google Maps API
+#### Twitter API (Optional, for real tweets)
 
-1. Visit [Google Cloud Console](https://console.cloud.google.com)
-2. Enable Geocoding API
-3. Create an API key
-4. Add to `.env`
+1. Visit [Twitter Developer Portal](https://developer.twitter.com/)
+2. Create a project and app
+3. Generate a Bearer Token
+4. Add to `.env` as `TWITTER_BEARER_TOKEN`
 
 ### 5. Start the Application
 
@@ -229,6 +225,21 @@ Get mock social media reports.
 - `disaster_id`: Filter by disaster
 - `keywords`: Comma-separated keywords
 
+**Response Example:**
+
+```json
+{
+  "id": "mock_123e4567-e89b-12d3-a456-426614174000_1",
+  "text": "#floodrelief Need food and water in Lower East Side, NYC. Situation is urgent!",
+  "author_id": "citizen1",
+  "username": "citizen1",
+  "name": "Local Resident",
+  "created_at": "2025-06-19T07:10:16.647Z",
+  "priority": "high",
+  "type": "need"
+}
+```
+
 ### Geocoding
 
 #### POST /api/geocode
@@ -243,6 +254,8 @@ Extract location and convert to coordinates.
   "location_name": "Optional explicit location"
 }
 ```
+
+**Note:** Geocoding uses OpenStreetMap Nominatim and does **not** require an API key.
 
 ### Image Verification
 
@@ -313,7 +326,7 @@ disaster-response-platform/
 │   └── geocoding.js         # Geocoding routes
 ├── services/
 │   ├── geminiService.js     # Google Gemini API integration
-│   ├── geocodingService.js  # Geocoding service
+│   ├── geocodingService.js  # Geocoding service (OpenStreetMap)
 │   └── socialMediaService.js # Social media service
 ├── socket/
 │   └── socketHandlers.js    # WebSocket event handlers
