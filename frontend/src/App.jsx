@@ -52,7 +52,7 @@ function App() {
               user ? (
                 <Dashboard user={user} onLogout={handleLogout} />
               ) : (
-                <Navigate to="/login" />
+                <Navigate to="/" />
               )
             }
           />
